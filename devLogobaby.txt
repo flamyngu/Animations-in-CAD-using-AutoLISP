@@ -1,0 +1,2 @@
+erste Iteration, jeder Pixel wird einzeln gezeichnet: dauer pro frame = 1min 4sec
+zweite Iteration, benachbarte schwarze Pixel (rows) werden als Linie zusammen gefasst: dauer pro frame = 1-4 sec 
