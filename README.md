@@ -76,7 +76,7 @@ To extract PBM frames from a video (e.g. `badapple.mp4`) for your animation, use
 
 ```bash
 ffmpeg -i badapple.mp4 -vf fps=5,scale=200:148 frames/frame_%04d.pbm
-
+```
 
 
 I am currently working on a way to display the frames rapidly after one another, basically creating a video player inside nanoCAD/AutoCAD
