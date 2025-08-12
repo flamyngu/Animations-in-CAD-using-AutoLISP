@@ -1,3 +1,9 @@
+The goal of this project is to create an AutoLISP-based animation player for CAD software (specifically nanoCAD 5 and AutoCAD) that can render frame-by-frame animations directly inside the CAD environment. Each animation frame is stored as a PBM (Portable Bitmap) image file in ASCII format, representing pixel data as black and white values.
+
+The script reads these PBM files, parses their pixel data, and draws corresponding filled rectangles in the CAD model space, effectively recreating each frame as vector graphics. By loading and displaying these frames sequentially with a brief delay and automatic clearing of the previous frame, the program achieves smooth playback of animations within CAD.
+
+This tool allows users to visualize pixel-based animations, such as simplified versions of “Bad Apple,” without leaving the CAD environment. It is also designed to be flexible and general enough to support any PBM sequence, enabling custom animations to be played back in CAD.
+
 
 # AutoLISP PBM Frame Drawer (`c:drawpbm`)
 
