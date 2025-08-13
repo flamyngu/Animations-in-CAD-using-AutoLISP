@@ -1,3 +1,22 @@
+;; Simulates vl-sleep for nanoCAD 5
+;; milliseconds: delay time in milliseconds (1000 = 1 second)
+(defun my-sleep (milliseconds / start-time end-time current-time)
+  (setq start-time (getvar "DATE"))
+  (setq end-time (+ start-time (/ milliseconds 86400000.0))) ; Convert ms to days (AutoCAD DATE format)
+  (while (< (getvar "DATE") end-time)
+    ; Busy wait loop - keeps checking current time
+    (setq current-time (getvar "DATE"))
+  )
+  t
+)
+
+;; Legacy pause function that uses my-sleep
+;; seconds: delay time in seconds (can be fractional, e.g., 0.5 for half second)
+(defun pause (seconds)
+  (if (not seconds) (setq seconds 1)) ; Default to 1 second if no argument
+  (my-sleep (* seconds 1000)) ; Convert seconds to milliseconds
+)
+
 (defun str-trim (str / start end)
   ;; Führende und folgende Leerzeichen entfernen
   (setq start 1)
@@ -163,21 +182,30 @@
     (princ "\nKeine Frames zum Abspielen vorhanden.")
     (progn
       (command "_.MSPACE") ;; In Modelspace wechseln
+      (princ frames)
       (setq i 0)
       (while (< i (length frames))
-        ;; Alles löschen
-        (setq selset (ssget "X"))
-        (if selset (command "_.ERASE" selset ""))
+        
+        ;; Delete all entities before drawing next frame (except for first frame)
+        (if (> i 0)
+          (progn
+            (princ "\nLösche vorherige Frame...")
+            ;; Simple and reliable method: use ERASE command with ALL selection
+            (command "_.ERASE" "_ALL" "")
+            (princ "\nVorherige Frame gelöscht.")
+          )
+        )
+        
+        (princ (strcat "\nZeichne Frame: " (itoa i)))
         
         ;; Frame zeichnen
         (draw-frame (nth i frames))
         
-        ;; Zoom Extents
-        (command "_.ZOOM" "_EXTENTS")
+        ;; Zoom to specific area: bottom-left (-13048, -8490) to top-right (22623, 8733)
+        (command "_.ZOOM" "_WINDOW" "-13048,-8490" "22623,8733")
         
         ;; Kleine Pause
-        (vl-sleep 0.1)
-        
+        (pause 0.01)
         (setq i (1+ i))
       )
       (princ "\nAlle Frames gezeichnet.")
