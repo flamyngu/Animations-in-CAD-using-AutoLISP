@@ -1,4 +1,48 @@
-The goal of this project is to create an AutoLISP-based animation player for CAD software (specifically nanoCAD 5 and AutoCAD) that can render frame-by-frame animations directly inside the CAD environment. Each animation frame is stored as a PBM (Portable Bitmap) image file in ASCII format, representing pixel data as black and white values.
+# 🎬 AutoLISP Animation Player for CAD
+
+```
+ ██████╗ █████╗ ████████╗    ███████╗██╗██╗     ███╗   ███╗███████╗
+██╔════╝██╔══██╗██╔═══██║    ██╔════╝██║██║     ████╗ ████║██╔════╝
+██║     ███████║██║   ██║    █████╗  ██║██║     ██╔████╔██║███████╗
+██║     ██╔══██║██║   ██║    ██╔══╝  ██║██║     ██║╚██╔╝██║╚════██║
+╚██████╗██║  ██║████████║    ██║     ██║███████╗██║ ╚═╝ ██║███████║
+ ╚═════╝╚═╝  ╚═╝╚═══════╝    ╚═╝     ╚═╝╚══════╝╚═╝     ╚═╝╚══════╝
+                    
+    🚀 BRINGING VIDEOS TO LIFE IN YOUR CAD ENVIRONMENT! 🚀
+```
+
+> **The Ultimate Tool for CAD Animation Magic** ✨  
+> Transform any video into stunning frame-by-frame animations that play directly inside AutoCAD, nanoCAD, and other CAD software using the power of AutoLISP!
+
+---
+
+## 🎥 **LIVE DEMO** 
+
+Check out my demo video to see the magic in action:
+
+<<<<<<< HEAD
+![Demo Animation](demo.mp4)
+
+*📹 **demo.mp4** - Watch how we convert a video file into a smooth CAD animation!*
+
+**What you'll see in the demo:**
+- 🔄 **Real-time conversion** from MP4 to animation frames
+- ⚡ **Smooth frame transitions** at 30 FPS
+- 🎯 **Perfect pixel-to-vector conversion**
+=======
+https://github.com/flamyngu/Animations-in-CAD-using-AutoLISP/demo_AC.mp4
+>>>>>>> 73396a2625ee4ef89307d8ceb1aef4ce07f8a3c6
+
+Create and play frame-by-frame animations directly inside AutoCAD and nanoCAD using AutoLISP! This project converts video files into bitmap frames and plays them as vector graphics animations within your CAD environment.
+
+## 🌟 Features
+
+- **🎥 Video to Animation Conversion** - Convert any video file into CAD-playable animations
+- **🖼️ Multiple Format Support** - Both PBM (text-based) and BMP (image-based) formats
+- **⚡ Automated Workflow** - One-click conversion from video to ready-to-use animation files
+- **🛠️ Flexible Configuration** - Easily adjust frame rate, resolution, and quality
+- **📱 Cross-Compatible** - Works with AutoCAD 2026, nanoCAD 5, and other AutoLISP-compatible CAD software
+- **🎯 Smart Installation** - Automatic dependency detection and installationoal of this project is to create an AutoLISP-based animation player for CAD software (specifically nanoCAD 5 and AutoCAD) that can render frame-by-frame animations directly inside the CAD environment. Each animation frame is stored as a PBM (Portable Bitmap) image file in ASCII format, representing pixel data as black and white values.
 
 The script reads these PBM files, parses their pixel data, and draws corresponding filled rectangles in the CAD model space, effectively recreating each frame as vector graphics. By loading and displaying these frames sequentially with a brief delay and automatic clearing of the previous frame, the program achieves smooth playback of animations within CAD.
 
