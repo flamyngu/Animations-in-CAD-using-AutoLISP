@@ -20,18 +20,7 @@
 
 Check out my demo video to see the magic in action:
 
-<<<<<<< HEAD
-![Demo Animation](demo.mp4)
-
-*📹 **demo.mp4** - Watch how we convert a video file into a smooth CAD animation!*
-
-**What you'll see in the demo:**
-- 🔄 **Real-time conversion** from MP4 to animation frames
-- ⚡ **Smooth frame transitions** at 30 FPS
-- 🎯 **Perfect pixel-to-vector conversion**
-=======
-https://github.com/flamyngu/Animations-in-CAD-using-AutoLISP/demo_AC.mp4
->>>>>>> 73396a2625ee4ef89307d8ceb1aef4ce07f8a3c6
+![Demo Animation](github.com/flamyngu/Animations-in-CAD-using-AutoLISP/demo/demo_AC.mp4)
 
 Create and play frame-by-frame animations directly inside AutoCAD and nanoCAD using AutoLISP! This project converts video files into bitmap frames and plays them as vector graphics animations within your CAD environment.
 
