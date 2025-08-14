@@ -7,18 +7,17 @@
     ; Busy wait loop - keeps checking current time
     (setq current-time (getvar "DATE"))
   )
-  t
 )
 
 ;; Legacy pause function that uses my-sleep
 ;; seconds: delay time in seconds (can be fractional, e.g., 0.5 for half second)
 (defun pause (seconds)
-  (if (not seconds) (setq seconds 1)) ; Default to 1 second if no argument
-  (my-sleep (* seconds 1000)) ; Convert seconds to milliseconds
+  (if (not seconds) (setq seconds 1))
+  (my-sleep (* seconds 1000))
 )
 
 (defun str-trim (str / start end)
-  ;; Führende und folgende Leerzeichen entfernen
+  ;; Trim leading and trailing spaces from a string
   (setq start 1)
   (while (and (<= start (strlen str))
               (= (substr str start 1) " "))
@@ -36,7 +35,7 @@
 )
 
 (defun str-split (str delim / pos result part len delim-len)
-  ;; Einfacher Split: trennt str bei delim (ein Zeichen)
+  ;; Split a string by a delimiter and return a list of parts
   (setq delim-len (strlen delim))
   (setq result '())
   (setq len (strlen str))
@@ -55,9 +54,8 @@
 
 (defun parse-pbm-line (line / trimmed split nums)
   (setq trimmed (str-trim line))
-  ;; Spalte anhand von Leerzeichen splitten
   (setq split (str-split trimmed " "))
-  ;; Strings zu Zahlen konvertieren
+  ;; Convert split strings to integers
   (setq nums '())
   (foreach s split
     (if (not (equal s ""))
@@ -76,8 +74,8 @@
       '(0 . "LWPOLYLINE")
       '(100 . "AcDbEntity")
       '(100 . "AcDbPolyline")
-      '(90 . 4) ;; 4 Punkte
-      '(70 . 1) ;; geschlossen
+      '(90 . 4) 
+      '(70 . 1) 
       (cons 10 (list x1 y))
       (cons 10 (list x2 y))
       (cons 10 (list x2 (- y scale)))
@@ -122,10 +120,10 @@
 )
 
 (defun draw-frame (filename / file line row data scale)
-  (setq scale 20) ;; Pixelgröße anpassen
+  (setq scale 20) ;; Default scale factor
 
   (setq file (open filename "r"))
-  ;; PBM Header lesen (2 Zeilen: P1 und Größe oder Kommentar)
+  ;; Read PBM header
   (read-line file)
   (read-line file)
 
@@ -167,7 +165,7 @@
     (progn (princ (strcat "\nDatei nicht gefunden: " filepath)) nil)
     (progn
       (while (setq line (read-line f))
-        (if (/= line "") ; leere Zeilen ignorieren
+        (if (/= line "") 
           (setq frames (append frames (list line)))
         )
       )
@@ -177,44 +175,59 @@
   )
 )
 
-(defun play-frames-from-list (frames / i selset)
+(defun play-frames-from-list (frames / i frame-count start-time)
   (if (not frames)
     (princ "\nKeine Frames zum Abspielen vorhanden.")
     (progn
-      (command "_.MSPACE") ;; In Modelspace wechseln
-      (princ frames)
-      (setq i 0)
-      (while (< i (length frames))
+      ;; Setup - Switch to Model Space and set initial zoom
+      (command "_.MSPACE")
+      (setq frame-count (length frames))
+      (princ (strcat "\nStarte Animation mit " (itoa frame-count) " Frames..."))
+      
+      ;; Set zoom once at the beginning for better performance
+      (command "_.ZOOM" "_WINDOW" "-13048,-8490" "22623,8733")
+      (princ "\nZoom auf Animationsbereich gesetzt.")
+      
+      ;; Turn off unnecessary redraws for better performance
+      (setvar "REGENMODE" 0)
+      
+      ;; Animation loop
+      (setq i 0
+            start-time (getvar "DATE"))
+      (while (< i frame-count)
         
-        ;; Delete all entities before drawing next frame (except for first frame)
+        ;; Clear previous frame (skip for first frame)
         (if (> i 0)
           (progn
-            (princ "\nLösche vorherige Frame...")
-            ;; Simple and reliable method: use ERASE command with ALL selection
             (command "_.ERASE" "_ALL" "")
-            (princ "\nVorherige Frame gelöscht.")
           )
         )
         
-        (princ (strcat "\nZeichne Frame: " (itoa i)))
-        
-        ;; Frame zeichnen
+        ;; Draw current frame
+        (princ (strcat "\rFrame: " (itoa (1+ i)) "/" (itoa frame-count)))
         (draw-frame (nth i frames))
         
-        ;; Zoom to specific area: bottom-left (-13048, -8490) to top-right (22623, 8733)
-        (command "_.ZOOM" "_WINDOW" "-13048,-8490" "22623,8733")
+        ;; Force redraw for immediate visual update
+        (command "_.REDRAW")
         
-        ;; Kleine Pause
-        (pause 0.01)
+        ;; Short pause for animation timing
+        (pause 0.05)
+        
         (setq i (1+ i))
       )
-      (princ "\nAlle Frames gezeichnet.")
+      
+      ;; Cleanup and final status
+      (setvar "REGENMODE" 1)
+      (setq end-time (getvar "DATE"))
+      (princ (strcat "\n\nAnimation abgeschlossen! " 
+                     (itoa frame-count) " Frames in " 
+                     (rtos (* (- end-time start-time) 86400) 2 2) " Sekunden."))
     )
   )
   (princ)
 )
 
-(defun c:playframes (/ filepath frames)
+(defun c:PBMPLAY (/ filepath frames)
   (princ "\nBitte Textdatei mit Frame-Pfaden auswählen:")
   (setq filepath (getfiled "Textdatei mit Frame-Pfaden wählen" "" "txt" 0))
   (if (not filepath)
